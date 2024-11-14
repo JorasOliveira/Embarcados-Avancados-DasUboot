@@ -1,10 +1,10 @@
 # Coloque aqui o nome do tutorial de vocês
 
-- **Alunes:** .../ ... /...
-- **Curso:** Engenharia da Computação
-- **Semestre:** 9
+- **Alunos:** Joras Oliveira, Eduardo Barros
+- **Curso:** Engenharia da Computação, Ciencia da Computação
+- **Semestre:** 9, 6
 - **Contato:** corsiferrao@gmail.com
-- **Ano:** 2020
+- **Ano:** 2024
 
 ## Começando
 
