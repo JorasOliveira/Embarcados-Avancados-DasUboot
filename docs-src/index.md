@@ -1,8 +1,8 @@
 - **Students:** Joras Oliveira, Eduardo Barros
-- **Curso:** Engenharia da Computação, Ciencia da Computação
-- **Semestre:** 9, 6
-- **Contato:** corsiferrao@gmail.com
-- **Ano:** 2024
+- **Course:** Engenharia da Computação, Ciencia da Computação
+- **Sesmester:** 9, 6
+- **Contact:** corsiferrao@gmail.com
+- **Year:** 2024
 
 ## Starting
 
