@@ -1,16 +1,17 @@
+# Uboot
 - **Students:** Joras Oliveira, Eduardo Barros
 - **Course:** Engenharia da Computação, Ciencia da Computação
-- **Sesmester:** 9, 6
-- **Contact:** corsiferrao@gmail.com
+- **Semester:** 9, 6
+- **Contact:** jorascco@al.insper.edu.br, eduardosmb@al.insper.edu.br
 - **Year:** 2024
 
 ## Starting
 
 To follow this tutorial you need:
 
-- **Hardware:** DE10-Standard e acessórios
-- **Softwares:** Quartus 18.01
-- **Documents:** [DE10-Standard_User_manual.pdf](https://github.com/Insper/DE10-Standard-v.1.3.0-SystemCD/tree/master/Manual)
+- **Hardware:** DE10-Standard
+- **Memory Card:** At least 8GB
+- **Terminal emulator:** Any one that can read serial ports (we recommend picocom)
 
 ## Motivation
 
@@ -18,97 +19,34 @@ Expliquem porque quiseram fazer esse tutorial.
 
 ----------------------------------------------
 
-!!! info 
-    Essas duas partes são obrigatórias no tutorial:
-    
-    - Nome de vocês
-    - Começando
-    - Motivação
+## Preparing the Embedded Linux
 
-## Recursos Markdown
+For this tutorial, we will use a pre-compiled embedded Linux. Please follow the steps below:
 
-Vocês podem usar tudo que já sabem de markdown mais alguns recursos:
+1. **Download the ZIP Files**
+   - Download the ZIP files located inside the "build" folder.
 
-!!! note 
-    Bloco de destaque de texto, pode ser:
-    
-    - note, example, warning, info, tip, danger
-    
-!!! example "Faça assim"
-    É possível editar o título desses blocos
-    
-    !!! warning
-        Isso também é possível de ser feito, mas
-        use com parcimonia.
-    
-??? info 
-    Também da para esconder o texto, usar para coisas
-    muito grandes, ou exemplos de códigos.
-    
-    ```txt
-    ...
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    oi!
-    ```
-    
-- **Esse é um texto em destaque**
-- ==Pode fazer isso também==
+2. **Insert the Memory Card**
+   - Insert your memory card into your computer.
 
-Usar emojis da lista:
+3. **Create Two Partitions**
+   - Create two separate partitions on your memory card.
 
-:two_hearts: - https://github.com/caiyongji/emoji-list
+4. **Extract ZIP Contents**
+   - Extract the contents of `xyx.zip` to the **first partition**.
+   - Extract the contents of `abc.zip` to the **second partition**.
+
+5. **Eject the Memory Card**
+   - Safely eject your memory card from the computer.
+
+Now your memory card is prepared with the embedded Linux system.
 
 
-```c
-// da para colocar códigos
- void main (void) {}
+## Entering in the uboot environment
+
+Turn the FPGA on with the memory card inserted. After that run the picocom:
+```bash
+sudo picocom /dev/ttyUSB0 -b 115200
 ```
 
-É legal usar abas para coisas desse tipo:
-    
-=== "C"
 
-    ``` c
-    #include <stdio.h>
-
-    int main(void) {
-      printf("Hello world!\n");
-      return 0;
-    }
-    ```
-
-=== "C++"
-
-    ``` c++
-    #include <iostream>
-
-    int main(void) {
-      std::cout << "Hello world!" << std::endl;
-      return 0;
-    }
-    ```
-
-Inserir vídeo:
-
--  Abra o youtube :arrow_right: clique com botão direito no vídeo :arrow_right: copia código de incorporação:
-
-<iframe width="630" height="450" src="https://www.youtube.com/embed/UIGsSLCoIhM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-!!! tip
-    Eu ajusto o tamanho do vídeo `width`/`height` para não ficar gigante na página
-    
-Imagens você insere como em plain markdown, mas tem a vantagem de poder mudar as dimensões com o marcador `{width=...}`
-    
-![](icon-elementos.png)
-
-![](icon-elementos.png){width=200}
