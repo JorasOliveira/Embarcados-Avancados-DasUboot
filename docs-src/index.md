@@ -1,20 +1,18 @@
-# Coloque aqui o nome do tutorial de vocês
-
-- **Alunos:** Joras Oliveira, Eduardo Barros
+- **Students:** Joras Oliveira, Eduardo Barros
 - **Curso:** Engenharia da Computação, Ciencia da Computação
 - **Semestre:** 9, 6
 - **Contato:** corsiferrao@gmail.com
 - **Ano:** 2024
 
-## Começando
+## Starting
 
-Para seguir esse tutorial é necessário:
+To follow this tutorial you need:
 
 - **Hardware:** DE10-Standard e acessórios
 - **Softwares:** Quartus 18.01
-- **Documentos:** [DE10-Standard_User_manual.pdf](https://github.com/Insper/DE10-Standard-v.1.3.0-SystemCD/tree/master/Manual)
+- **Documents:** [DE10-Standard_User_manual.pdf](https://github.com/Insper/DE10-Standard-v.1.3.0-SystemCD/tree/master/Manual)
 
-## Motivação
+## Motivation
 
 Expliquem porque quiseram fazer esse tutorial.
 
