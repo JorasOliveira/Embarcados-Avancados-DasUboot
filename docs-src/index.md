@@ -104,8 +104,8 @@ This U-Boot script sequence is used to configure an FPGA by loading a configurat
         - **`$fpgadata`**: The memory address where the bitstream was loaded using `fatload`.  
         - **`$filesize`**: The size of the loaded bitstream file, automatically set by the `fatload` command.  
 
-**Purpose**: 
-     Configures the FPGA by loading the bitstream from the specified memory address into the FPGA’s configuration memory. This step initializes the FPGA to function as designed in the loaded configuration.
+    **Purpose**: 
+        Configures the FPGA by loading the bitstream from the specified memory address into the FPGA’s configuration memory. This step initializes the FPGA to function as designed in the loaded configuration.
 
 3. **`fi;`**  
     - Marks the end of the `if` statement. If the `fatload` fails (e.g., the file is missing or the storage device is not accessible), the `fpga load` command will not be executed, and the script exits the conditional block.
@@ -143,8 +143,6 @@ Let's go command by command, and understand this togheter.
     - **`${fpgaintf_handoff}`**: This is another variable representing the value to be written at the `$fpgaintf` address. The value contains configuration data for the FPGA interface, which will be passed from one part of the system to another as part of the "handoff" process.
 
     In this command, the FPGA interface is being configured by writing the value stored in `${fpgaintf_handoff}` to the address `$fpgaintf`.
-
-
 
 2. **`go $fpga2sdram_apply;`**
     - **`go`**: This is a U-Boot command that is used to jump to an address in memory and start executing code from that address. It is commonly used to jump to a part of memory where code is stored (such as firmware or an application).
