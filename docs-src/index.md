@@ -40,10 +40,10 @@ By 2004, U-Boot had become the bootloader of choice for embedded systems, with t
 
 ## Preparing the Embedded Linux
 
-For this tutorial, we will use a pre-compiled embedded Linux (we reccomend the one from the [HPS + FPGA Blink Led](https://insper.github.io/Embarcados-Avancados/Tutorial-HPS-FPGA-BlinkLED/)).
+For this tutorial, we will use a pre-compiled embedded Linux (we reccomend the one from the [HPS - Running](https://insper.github.io/Embarcados-Avancados/Tutorial-HPS-Running/)).
 
-## u-boot.src
-Inside the smaller partition of SD-card, you will find a u-boot.src file, this is our uboot script, its function is similar to a bash.rc script, as it just executes each command in order, you will notice that every command inside the u-boot.src file is in itself a script, for the most past these scripts simply write something into memory then executes it. 
+## boot.src
+Inside the smaller partition of SD-card, you will find a boot.src file, this is our uboot script, its function is similar to a bash.rc script, as it just executes each command in order, you will notice that every command inside the u-boot.src file is in itself a script, for the most past these scripts simply write something into memory then executes it. 
 
 Open the u-boot.src file in a text editor, and you should see something like this:
 
@@ -69,6 +69,49 @@ sudo picocom /dev/ttyUSB0 -b 115200
 After you start the fpga, there should be a warning on screen telling you to press any button to disable automatic uboot, ***press any button*** so we can force the manual uboot (what we want). In this mode, we can use the printenv command to print all the environemt variables, scripts and commands. 
 
 ![](uboot_press_any_button.jpeg)
+
+### FPGA configuration files
+
+The first part of the script loads the FPGA config sctipt into memory, depending on your linux version you may or may not have one.
+
+```bash
+if fatload mmc 0:1 $fpgadata soc_system.rbf; then
+    fpga load 0 $fpgadata $filesize;
+fi;
+```
+
+This U-Boot script sequence is used to configure an FPGA by loading a configuration file (bitstream) from an MMC/SD card and programming the FPGA with it.
+
+---
+
+1. **`if fatload mmc 0:1 $fpgadata soc_system.rbf; then`**  
+    - **`fatload`**:  
+        - A U-Boot command to load a file from a FAT-formatted storage device (like an MMC/SD card).  
+        - **`mmc 0:1`**: Specifies the device and partition:
+        - `0`: The first MMC/SD card.
+        - `1`: The first partition on that card.  
+        - **`$fpgadata`**: Specifies the memory address where the file will be loaded. This variable is typically set to a specific location in RAM.  
+        - **`soc_system.rbf`**: The name of the file being loaded. `.rbf` stands for Raw Binary File, which contains the FPGA configuration data (bitstream).  
+    - **`if ... then`**:  
+        - The `if` condition checks whether the `fatload` command succeeded. If the file is loaded successfully, the script executes the commands in the `then` block.
+
+
+
+2. **`fpga load 0 $fpgadata $filesize;`**  
+    - **`fpga load`**:  
+        - A U-Boot command for programming (configuring) the FPGA.  
+        - **`0`**: Specifies the FPGA device to be programmed (the first FPGA in this case).  
+        - **`$fpgadata`**: The memory address where the bitstream was loaded using `fatload`.  
+        - **`$filesize`**: The size of the loaded bitstream file, automatically set by the `fatload` command.  
+
+**Purpose**: 
+     Configures the FPGA by loading the bitstream from the specified memory address into the FPGA’s configuration memory. This step initializes the FPGA to function as designed in the loaded configuration.
+
+3. **`fi;`**  
+    - Marks the end of the `if` statement. If the `fatload` fails (e.g., the file is missing or the storage device is not accessible), the `fpga load` command will not be executed, and the script exits the conditional block.
+
+---
+
 
 ### Bridge enable handoff
 We will start by printing the 'bridge_enable_handoff, a scirpt designed to configure hardware bridges and handoffs (transitions between stages in the hardware setup). It configures hardware bridges that facilitate communication between different components, such as the FPGA, SDRAM, and AXI bus. 
@@ -101,7 +144,7 @@ Let's go command by command, and understand this togheter.
 
     In this command, the FPGA interface is being configured by writing the value stored in `${fpgaintf_handoff}` to the address `$fpgaintf`.
 
----
+
 
 2. **`go $fpga2sdram_apply;`**
     - **`go`**: This is a U-Boot command that is used to jump to an address in memory and start executing code from that address. It is commonly used to jump to a part of memory where code is stored (such as firmware or an application).
@@ -109,16 +152,12 @@ Let's go command by command, and understand this togheter.
 
     This command initiates the FPGA-to-SDRAM application process, possibly activating or applying the configuration that was set up earlier.
 
----
-
 3. **`mw $fpga2sdram ${fpga2sdram_handoff};`**
     - **`mw`**: Writes a value to memory.
     - **`$fpga2sdram`**: This variable points to the address where the FPGA-to-SDRAM configuration should be applied.
     - **`${fpga2sdram_handoff}`**: This variable holds the configuration data to be written to the `$fpga2sdram` address. This configures how the FPGA communicates with SDRAM.
 
     This command writes the value stored in `${fpga2sdram_handoff}` to the address `$fpga2sdram`, configuring the bridge between the FPGA and SDRAM as part of the handoff.
-
----
 
 4. **`mw $axibridge ${axibridge_handoff};`**
     - **`mw`**: Writes a value to memory.
@@ -167,7 +206,6 @@ mmcload=
 1. **`mmc rescan;`**  
     - **`mmc`**: This is a U-Boot command for interacting with MMC (MultiMediaCard) or SD (Secure Digital) card storage devices.
     - **`rescan`**: This subcommand scans the MMC/SD card bus to detect connected devices and verify their presence. Guaranteeing that the system recognizes the card and can access its contents.  
----
 
 2. **`${mmcloadcmd} mmc 0:${mmcloadpart} ${loadaddr} ${bootimage};`**  
     - **`${mmcloadcmd}`**: This variable defines the command to be used for loading files from the MMC/SD card. Commonly, this is set to `load` or `fatload`, which specifies the file system used (e.g., FAT).
@@ -180,7 +218,6 @@ mmcload=
    
    **Purpose**: This command reads the specified kernel image from the given partition of the MMC/SD card and places it in the system's memory at the specified address.
 
----
 
 3. **`${mmcloadcmd} mmc 0:${mmcloadpart} ${fdtaddr} ${fdtimage};`**  
     - This command is nearly identical to the previous one but focuses on loading the **device tree blob (DTB)** instead of the kernel image.  
@@ -234,7 +271,6 @@ mmcboot=
         - Specifies that the root filesystem should be mounted in read-write mode, allowing the system to make changes to it during operation.
     - **`rootwait`**:  
         - Instructs the kernel to wait for the root filesystem device to be ready before proceeding, sometimes necessary to ensure a reliable mounting process.
----
 
 2. **`bootz ${loadaddr} - ${fdtaddr};`**  
     - **`bootz`**:  
@@ -249,7 +285,6 @@ mmcboot=
         
     **Purpose**: This command hands over control from U-Boot to the Linux kernel, using the loaded kernel image and device tree blob to initialize the operating system.
 
----
 
 ### Manual U-Boot
 Now that we understand the U-boot process, we can manually run it by copying the commands in the correct order:
@@ -259,25 +294,22 @@ Now that we understand the U-boot process, we can manually run it by copying the
     Only the final mmcboot=... should print as it executes the boot.
 
 ```bash
-bridge_enable_handoff=
-    mw $fpgaintf ${fpgaintf_handoff};
-    go $fpga2sdram_apply;
-    mw $fpga2sdram ${fpga2sdram_handoff};
-    mw $axibridge ${axibridge_handoff};
-    mw $l3remap ${l3remap_handoff};
+mw $fpgaintf ${fpgaintf_handoff};
+go $fpga2sdram_apply;
+mw $fpga2sdram ${fpga2sdram_handoff};
+mw $axibridge ${axibridge_handoff};
+mw $l3remap ${l3remap_handoff};
 ```
 
 ```bash
-mmcload=
-    mmc rescan;
-    ${mmcloadcmd} mmc 0:${mmcloadpart} ${loadaddr} ${bootimage};
-    ${mmcloadcmd} mmc 0:${mmcloadpart} ${fdtaddr} ${fdtimage};
+mmc rescan;
+${mmcloadcmd} mmc 0:${mmcloadpart} ${loadaddr} ${bootimage};
+${mmcloadcmd} mmc 0:${mmcloadpart} ${fdtaddr} ${fdtimage};
 ```
 
 ```bash
-mmcboot=
-    setenv bootargs console=ttyS0,115200 root=${mmcroot} rw rootwait;
-    bootz ${loadaddr} - ${fdtaddr};
+setenv bootargs console=ttyS0,115200 root=${mmcroot} rw rootwait;
+bootz ${loadaddr} - ${fdtaddr};
 ```
 
 If everything goes wright, your linux should boot by the end!
