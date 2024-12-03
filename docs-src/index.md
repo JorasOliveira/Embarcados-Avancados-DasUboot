@@ -281,7 +281,7 @@ mmcboot=
 ```
 
 If everything goes wright, your linux should boot by the end!
-
+![](uboot-commands.jpeg)
 ![](boot.jpeg)
 
 ---
