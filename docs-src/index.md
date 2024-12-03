@@ -40,24 +40,7 @@ By 2004, U-Boot had become the bootloader of choice for embedded systems, with t
 
 ## Preparing the Embedded Linux
 
-For this tutorial, we will use a pre-compiled embedded Linux (we reccomend the one from the [HPS + FPGA Blink Led](https://insper.github.io/Embarcados-Avancados/Tutorial-HPS-FPGA-BlinkLED/)). Please follow the steps below:
-
-1. **Insert the Memory Card**
-      - Insert your memory card into your computer.
-
-2. **Create Two Partitions**
-      - Create two separate partitions on your memory card.
-
-3. **Download the ZIP Files**
-      - Download the ZIP files located inside the "build" folder.
-
-4. **Extract ZIP Contents**
-      - Extract the contents of `xyx.zip` to the **first partition**.
-
-5. **Eject the Memory Card**
-      - Safely eject your memory card from the computer.
-
-Now your memory card is prepared with the embedded Linux system.
+For this tutorial, we will use a pre-compiled embedded Linux (we reccomend the one from the [HPS + FPGA Blink Led](https://insper.github.io/Embarcados-Avancados/Tutorial-HPS-FPGA-BlinkLED/)).
 
 ## u-boot.src
 Inside the smaller partition of SD-card, you will find a u-boot.src file, this is our uboot script, its function is similar to a bash.rc script, as it just executes each command in order, you will notice that every command inside the u-boot.src file is in itself a script, for the most past these scripts simply write something into memory then executes it. 
