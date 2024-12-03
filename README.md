@@ -35,35 +35,3 @@ mkdocs serve
 Agora você pode acessar a página: https://localhost:8000 para verificar o resultado.
 
 ## Deploy github
-
-
-
-
-## u-boot.src
-if fatload mmc 0:1 $fpgadata soc_system.rbf; then
-    fpga load 0 $fpgadata $filesize;
-fi;
-run bridge_enable_handoff;
-run mmcload;
-run mmcboot;
-
-### Configuração de bridges e handoffs
-bridge_enable_handoff=
-    mw $fpgaintf ${fpgaintf_handoff};
-    go $fpga2sdram_apply;
-    mw $fpga2sdram ${fpga2sdram_handoff};
-    mw $axibridge ${axibridge_handoff};
-    mw $l3remap ${l3remap_handoff};
-
-### Carregamento de arquivos do cartão MMC/SD
-mmcload=
-    mmc rescan;
-    ${mmcloadcmd} mmc 0:${mmcloadpart} ${loadaddr} ${bootimage};
-    ${mmcloadcmd} mmc 0:${mmcloadpart} ${fdtaddr} ${fdtimage};
-
-### Inicialização do sistema operacional
-mmcboot=
-    setenv bootargs console=ttyS0,115200 root=${mmcroot} rw rootwait;
-    bootz ${loadaddr} - ${fdtaddr};
-
-
